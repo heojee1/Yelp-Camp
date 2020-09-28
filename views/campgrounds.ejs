@@ -10,14 +10,17 @@
             </p>
         </div>
     </header>
-    
-    <a href='/campgrounds/new'>add a new campgrounds</a>
-    <% campgrounds.forEach((campground) => { %>
-        <div>
-            <h4><%= campground.name %></h4>
-            <img src='<%= campground.image %>'>
-        </div>
-    <% }); %> 
+
+    <div class="row">
+        <% campgrounds.forEach((campground) => { %>
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <img src='<%= campground.image %>'>
+                    <div class="caption"><%= campground.name %></div>
+                </div>
+            </div>
+        <% }); %> 
+    </div>
 </div>
 
 <%- include("partials/footer") %>
