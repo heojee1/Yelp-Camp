@@ -49,7 +49,11 @@ app.get('/campgrounds', (req, res) => {
 
 /* CREATE - add new campground to DB */
 app.post('/campgrounds', (req, res) => {
-  var newCampground = {name: req.body.name, image: req.body.image};
+  var newCampground = {
+    name: req.body.name, 
+    image: req.body.image,
+    description: req.body.description
+  };
   Campground.create(newCampground, (err, campground) => {
     if (err) console.log(err);
     else res.redirect('/campgrounds');
