@@ -1,7 +1,10 @@
 const express = require('express'),
       app = express(),
       bodyParser = require('body-parser'),
-      mongoose = require('mongoose');
+      mongoose = require('mongoose'),
+      Campground = require('./models/campground'),
+      Comment = require('./models/comment'),
+      seedDB = require('./seeds');
 
 app.use(express.static('public'));
 app.set('view engine','ejs');
@@ -14,25 +17,8 @@ mongoose.connect('mongodb://localhost:27017/yelp_camp', {
 .then(() => console.log('Connected to DB!'))
 .catch(error => console.log(error.message));
 
-/* SCHEMA setup */
-var campgroundSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String
-});
-
-var Campground = mongoose.model('Campground', campgroundSchema);
-
-// Campground.create(
-//   {
-//     name: 'Loch Lomond & The Trossachs', 
-//     image: 'https://images.unsplash.com/photo-1563299796-17596ed6b017?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-//     description: 'Mersmerizing nature. Have an unforgettable stay with your favorite animal - quokkas'
-//   }, (err, campground) => {
-//     if (err) console.log(err);
-//     else console.log(campground);
-//   }
-// )
+/* delete all and populate DB with seed data */
+seedDB();
 
 /* get landing page */
 app.get('/', (req, res) => {
@@ -67,7 +53,7 @@ app.get('/campgrounds/new', (req, res) => {
 
 /* SHOW - show more information about a campground */
 app.get('/campgrounds/:id', (req, res) => {
-  Campground.findById(req.params.id, (err, foundCampground) => {
+  Campground.findById(req.params.id).populate('comments').exec((err, foundCampground) => {
     if (err) console.log(err);
     else res.render('show', {campground: foundCampground});
   });
