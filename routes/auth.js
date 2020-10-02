@@ -41,7 +41,7 @@ router.post('/login', passport.authenticate('local',
 /* handle logout request */
 router.get('/logout', (req, res) => {
     req.logout();
-    res.redirect('/campgrounds');
+    res.redirect('back');
 });
 
 /* check if the user is logged in */
