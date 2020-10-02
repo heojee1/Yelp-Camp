@@ -18,18 +18,15 @@ router.get('/new', isLoggedIn, (req, res) => {
 /* CREATE - add new comment to campground and DB */
 router.post('/', isLoggedIn, (req, res) => {
     const newComment = req.body.comment;
+    newComment.author = {id: req.user._id, username: req.user.username};
     Comment.create(newComment, (err, comment) => {
         if (err) {
-        console.log(err);
-        res.redirect('/campgrounds');
+            console.log(err);
+            res.redirect('/campgrounds');
         } else {
             Campground.findById(req.params.id, (err, foundCampground) => {
                 if (err) console.log(err);
                 else {
-                    // add author id and username to comment
-                    comment.author.id = req.user._id;
-                    comment.author.username = req.user.username;
-                    comment.save();
                     // associate comment with campground
                     foundCampground.comments.push(comment);
                     foundCampground.save();
