@@ -16,8 +16,8 @@ router.post('/register', (req, res) => {
     let newUser = new User({username: req.body.username});
     User.register(newUser, req.body.password, (err, user) => {
         if (err) {
-        console.log(err);
-        return res.render('auth/register');
+            console.log(err);
+            return res.render('auth/register');
         }
         passport.authenticate('local')(req, res, () => {
         res.redirect('/campgrounds');
@@ -38,11 +38,13 @@ router.post('/login', passport.authenticate('local',
     }), (req, res) => {
 });
 
+/* handle logout request */
 router.get('/logout', (req, res) => {
     req.logout();
     res.redirect('/campgrounds');
 });
 
+/* check if the user is logged in */
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();

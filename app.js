@@ -50,7 +50,7 @@ app.use('/', authRoutes);
 app.use('/', indexRoutes);
 
 /* delete all and populate DB with seed data */
-seedDB();
+// seedDB();
 
 /* start the server */
 var port = process.env.PORT || 3000;
