@@ -26,6 +26,28 @@ router.post('/', isLoggedIn, (req, res) => {
     });
 });
 
+/* EDIT - edit campground */
+router.get('/:id/edit', (req, res) => {
+    Campground.findById(req.params.id, (err, campground) => {
+        if (err) {
+            res.redirect('/');
+        } else {
+            res.render('campgrounds/edit', {campground: campground});
+        }
+    });
+});
+
+/* UPDATE - update campground */
+router.put('/:id', (req, res) => {
+    Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, campground) => {
+        if (err) {
+            res.redirect('/campgrounds');
+        } else {
+            res.redirect(`/campgrounds/${req.params.id}`);
+        }
+    });
+});
+
 /* NEW - show form to create new campground */
 router.get('/new', isLoggedIn, (req, res) => {
     res.render('campgrounds/new');
