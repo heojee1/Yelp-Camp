@@ -79,7 +79,7 @@ app.get('/campgrounds/:id', (req, res) => {
 // =================
 
 /* NEW - show form to add new comment */
-app.get('/campgrounds/:id/comments/new', (req, res) => {
+app.get('/campgrounds/:id/comments/new', isLoggedIn, (req, res) => {
   Campground.findById(req.params.id, (err, foundCampground) => {
     if (err) console.log(err);
     else res.render('comments/new', {campground: foundCampground});
@@ -87,7 +87,7 @@ app.get('/campgrounds/:id/comments/new', (req, res) => {
 });
 
 /* CREATE - add new comment to campground and DB */
-app.post('/campgrounds/:id/comments', (req, res) => {
+app.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
   const newComment = req.body.comment;
   Comment.create(newComment, (err, comment) => {
     if (err) {
@@ -142,8 +142,20 @@ app.post('/login', passport.authenticate('local',
   }), (req, res) => {
 });
 
+app.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/campgrounds');
+})
+
 /* start the server */
 var port = process.env.PORT || 3000;
 app.listen(port, function () {
     console.log("Server Has Started!");
   });
+
+  function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect('/login');
+  }
