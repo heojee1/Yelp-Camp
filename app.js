@@ -106,6 +106,42 @@ app.post('/campgrounds/:id/comments', (req, res) => {
   });
 });
 
+// =====================
+// ==== AUTH Routes ====
+// =====================
+
+/* SHOW - show sign up form */
+app.get('/register', (req, res) => {
+  res.render('auth/register');
+});
+
+/* handle sing up request */
+app.post('/register', (req, res) => {
+  let newUser = new User({username: req.body.username});
+  User.register(newUser, req.body.password, (err, user) => {
+    if (err) {
+      console.log(err);
+      return res.render('auth/register');
+    }
+    passport.authenticate('local')(req, res, () => {
+      res.redirect('/campgrounds');
+    });
+  });
+});
+
+/* SHOW - show login form */
+app.get('/login', (req, res) => {
+  res.render('auth/login');
+})
+
+/* handle login request */
+app.post('/login', passport.authenticate('local', 
+  {
+    successRedirect: '/campgrounds',
+    failureRedirect: '/login'
+  }), (req, res) => {
+});
+
 /* start the server */
 var port = process.env.PORT || 3000;
 app.listen(port, function () {
