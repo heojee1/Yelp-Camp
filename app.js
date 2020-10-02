@@ -33,6 +33,12 @@ passport.use(new LocalStrategey(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// include current user object in all routes 
+app.use((req, res, next) =>  {
+  res.locals.currentUser = req.user;
+  next();
+});
+
 /* delete all and populate DB with seed data */
 seedDB();
 
@@ -43,6 +49,7 @@ app.get('/', (req, res) => {
 
 /* INDEX - show all campgrouds */
 app.get('/campgrounds', (req, res) => {
+  console.log('**** ', req.user);
   Campground.find({}, (err, campgrounds) => {
     if(err) console.log(err);
     else res.render('campgrounds/index', {campgrounds: campgrounds});
