@@ -1,9 +1,10 @@
-const { findById } = require('./models/campground');
-
 const express = require('express'),
       app = express(),
       bodyParser = require('body-parser'),
       mongoose = require('mongoose'),
+      passport = require('passport'),
+      LocalStrategey = require('passport-local'),
+      User = require('./models/user'),
       Campground = require('./models/campground'),
       Comment = require('./models/comment'),
       seedDB = require('./seeds');
@@ -18,6 +19,19 @@ mongoose.connect('mongodb://localhost:27017/yelp_camp', {
 })
 .then(() => console.log('Connected to DB!'))
 .catch(error => console.log(error.message));
+
+// PASSPORT configuration
+app.use(require('express-session')({
+  secret: "Jeewon Heo is an amazing human/genius!",
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategey(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 /* delete all and populate DB with seed data */
 seedDB();
@@ -37,10 +51,13 @@ app.get('/campgrounds', (req, res) => {
 
 /* CREATE - add new campground to DB */
 app.post('/campgrounds', (req, res) => {
-  var newCampground = req.body.compground;
+  var newCampground = req.body.campground;
   Campground.create(newCampground, (err, campground) => {
     if (err) console.log(err);
-    else res.redirect('/campgrounds');
+    else {
+      console.log(newCampground);
+      res.redirect('/campgrounds');
+    }
   });
 });
 
