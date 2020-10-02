@@ -5,6 +5,7 @@
 const express = require('express');
 const router = express.Router();
 const Campground = require('../models/campground');
+const Comment = require('../models/comment');
 
 /* INDEX - show all campgrouds */
 router.get('/', (req, res) => {
@@ -23,6 +24,19 @@ router.post('/', isLoggedIn, (req, res) => {
         else {
             res.redirect('/campgrounds');
         }
+    });
+});
+
+/* NEW - show form to create new campground */
+router.get('/new', isLoggedIn, (req, res) => {
+    res.render('campgrounds/new');
+});
+
+/* SHOW - show more information about a campground */
+router.get('/:id', (req, res) => {
+    Campground.findById(req.params.id).populate('comments').exec((err, foundCampground) => {
+        if (err) console.log(err);
+        else res.render('campgrounds/show', {campground: foundCampground});
     });
 });
 
@@ -48,17 +62,16 @@ router.put('/:id', (req, res) => {
     });
 });
 
-/* NEW - show form to create new campground */
-router.get('/new', isLoggedIn, (req, res) => {
-    res.render('campgrounds/new');
-});
-
-/* SHOW - show more information about a campground */
-router.get('/:id', (req, res) => {
-    Campground.findById(req.params.id).populate('comments').exec((err, foundCampground) => {
-        if (err) console.log(err);
-        else res.render('campgrounds/show', {campground: foundCampground});
-    });
+/* DElETE - delete campground */
+router.delete("/:id",async(req, res) => {
+    try {
+        let foundCampground = await Campground.findById(req.params.id);
+        await foundCampground.remove();
+        res.redirect(`/campgrounds`);
+    } catch (error) {
+        console.log(error.message);
+        res.redirect("/campgrounds");
+    }
 });
 
 /* check if the user is logged in */
