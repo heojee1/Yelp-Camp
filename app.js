@@ -8,7 +8,7 @@ const express = require('express'),
       Comment = require('./models/comment'),
       seedDB = require('./seeds');
 
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 app.set('view engine','ejs');
 app.use(bodyParser.urlencoded({extended:true}));
 
