@@ -11,8 +11,8 @@ router.get('/register', (req, res) => {
     res.render('auth/register');
 });
 
-/* handle sing up request */
-router.post('/register', (req, res) => {
+/* handle sign up request */
+router.post('/register', isNotLoggedIn, (req, res) => {
     let newUser = new User({username: req.body.username});
     User.register(newUser, req.body.password, (err, user) => {
         if (err) {
@@ -26,12 +26,12 @@ router.post('/register', (req, res) => {
 });
   
 /* SHOW - show login form */
-router.get('/login', (req, res) => {
+router.get('/login', isNotLoggedIn, (req, res) => {
     res.render('auth/login');
 });
 
 /* handle login request */
-router.post('/login', passport.authenticate('local', 
+router.post('/login', isNotLoggedIn, passport.authenticate('local', 
     {
         successRedirect: '/campgrounds',
         failureRedirect: '/login'
@@ -39,7 +39,7 @@ router.post('/login', passport.authenticate('local',
 });
 
 /* handle logout request */
-router.get('/logout', (req, res) => {
+router.get('/logout', isLoggedIn, (req, res) => {
     req.logout();
     res.redirect('back');
 });
@@ -49,7 +49,15 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    res.redirect('/login');
+    res.redirect('/campgrounds');
+}
+
+/* check if the user is logged in */
+function isNotLoggedIn(req, res, next) {
+    if (!req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/campgrounds');
 }
 
 module.exports = router;

@@ -82,7 +82,7 @@ function isLoggedIn(req, res, next) {
     res.redirect('/login');
 }
 
-/* check if the user has authorization */
+/* check if the user has authorization to the campground */
 function checkCampgroundOwnership(req, res, next) {
     if (req.isAuthenticated()) {
         Campground.findById(req.params.id, (err, foundCampground) => {
