@@ -16,9 +16,8 @@ const campgroundRoutes    = require('./routes/campgrounds'),
       authRoutes          = require('./routes/auth'),
       indexRoutes         = require('./routes/index');
 
-
 mongoose.connect(
-  'mongodb+srv://mongodbuser:n5CeVSXOXEwxTB9w@cluster0.prfo9.mongodb.net/yelp_camp?retryWrites=true&w=majority',
+  process.env.DB_URL,
   {
     useNewUrlParser: true,
     useFindAndModify: true,
@@ -62,7 +61,7 @@ app.use('/', indexRoutes);
 // seedDB();
 
 /* start the server */
-var port = process.env.PORT || 3000;
+var port = process.env.PORT;
 app.listen(port, function () {
     console.log("Server Has Started!");
   });
