@@ -16,6 +16,7 @@ const campgroundRoutes    = require('./routes/campgrounds'),
       authRoutes          = require('./routes/auth'),
       indexRoutes         = require('./routes/index');
 
+/* connect to mongodb */
 mongoose.connect(
   process.env.DB_URL,
   {
