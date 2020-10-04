@@ -61,7 +61,7 @@ app.use('/', indexRoutes);
 // seedDB();
 
 /* start the server */
-var port = process.env.PORT;
+var port = process.env.PORT || 3000;
 app.listen(port, function () {
     console.log("Server Has Started!");
   });
