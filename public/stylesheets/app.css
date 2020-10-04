@@ -1,4 +1,3 @@
-
 .thumbnail img {
     width: 100%;
 }
@@ -9,4 +8,17 @@
 
 .delete-form {
     display: inline;
+}
+
+.row h1 {
+    text-align: center
+}
+
+.form-container {
+    width: 30%;
+    margin: 25px auto;
+}
+
+#more-button {
+    margin-left: 9px;
 }

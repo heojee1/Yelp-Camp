@@ -17,9 +17,7 @@
                 <div class="thumbnail">
                     <img src='<%= campground.image %>'>
                     <div class="caption"><%= campground.name %></div>
-                    <p>
-                        <a href="/campgrounds/<%=campground._id%>" class="btn btn-primary">Show more</a>
-                    </p>
+                    <p id='more-button'><a href="/campgrounds/<%=campground._id%>" class="btn btn-sm btn-primary">Show more</a></p>
                 </div>
             </div>
         <% }); %> 
