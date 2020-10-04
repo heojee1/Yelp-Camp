@@ -29,3 +29,14 @@
 				</div>
 			</div>
 		</nav>
+		
+		<% if (error && error.length) { %>
+			<div class="container">
+				<div class="alert alert-danger" role='alert'><%= error %> </div>
+			</div>
+		<% } %> 
+		<% if (success && success.length) { %>
+			<div class="container">
+				<div class="alert alert-success" role='alert'><%= success %> </div>
+			</div>
+		<% } %> 

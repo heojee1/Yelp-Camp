@@ -6,6 +6,7 @@ const express             = require('express'),
       methodOverride      = require('method-override'),
       passport            = require('passport'),
       LocalStrategey      = require('passport-local'),
+      flash               = require('connect-flash'),
       User                = require('./models/user'),
       seedDB              = require('./seeds');
 
@@ -27,6 +28,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine','ejs');   
 app.use(express.static(__dirname + '/public')); 
 app.use(methodOverride('_method'));
+app.use(flash());
 
 // PASSPORT configuration
 app.use(require('express-session')({
@@ -43,6 +45,8 @@ passport.deserializeUser(User.deserializeUser());
 // include current user object in all routes 
 app.use((req, res, next) =>  {
   res.locals.currentUser = req.user;
+  res.locals.error = req.flash('error');
+  res.locals.success = req.flash('success');
   next();
 });
 
