@@ -22,3 +22,8 @@
 #more-button {
     margin-left: 9px;
 }
+
+#map {
+    height: 300px;
+    width: 100%;
+}
